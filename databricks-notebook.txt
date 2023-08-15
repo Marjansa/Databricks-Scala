@@ -1,0 +1,65 @@
+// Databricks notebook source
+// DBTITLE 1, Step 1: Setup
+// Create a new cluster in Databricks.
+// Create a new notebook and set it to use Scala.
+// Step 2: Data Preparation
+// Load the sales dataset into Databricks and create a DataFrame.
+
+// COMMAND ----------
+
+// Import Libraries
+import org.apache.spark.sql.functions._
+import com.databricks.dbutils_v1.DBUtilsHolder.dbutils
+
+// COMMAND ----------
+
+// DBTITLE 1,Step 2: Data Preparation Load the sales dataset into Databricks and create a DataFrame.
+// Load the sales dataset
+
+val salesData = spark.read.option("header", "true").option("inferSchema","true").csv("/FileStore/tables/sales-1.csv")
+
+
+
+// COMMAND ----------
+
+// salesData.printSchema()
+// salesData.show()
+// Display salesData dataframe
+display(salesData)
+
+// COMMAND ----------
+
+val salesByProductline= salesData.groupBy("PRODUCTLINE").agg(sum("SALES").alias("TOTAL SALE"))
+
+// COMMAND ----------
+
+// DBTITLE 1,Step 3: Data Exploration and Transformation
+
+// Perform some basic data exploration and transformations.
+// Diplay salesByProductLine
+salesByProductline.show()
+
+// COMMAND ----------
+
+// DBTITLE 1,Step 4: Data Visualization
+// Visualize the sales data using Databricks' built-in visualization tools.
+// Create a bar chart for total sales by product category
+display(salesByProductline)
+
+// COMMAND ----------
+
+// DBTITLE 1,Step 5: Analysis and Insights
+// Perform more advanced analysis to gain insights from the data.
+// Calculate average sales amount per product category
+val avgSalesByProductLine = salesData.groupBy("PRODUCTLINE").agg(avg("SALES").alias("AvgSales"))
+
+// Display the results
+avgSalesByProductLine.show()
+
+
+// COMMAND ----------
+
+// DBTITLE 1,Conclusion
+// In this project, we utilized Scala in Databricks to load, manipulate, and visualize sales data. We learned how to group and aggregate data to derive meaningful insights from the dataset.
+
+// This is a basic example to demonstrate intermediate-level learning of Scala programming within a Databricks environment. You can further enhance this project by incorporating more advanced Scala concepts, exploring additional datasets, and performing more complex data analyses.
